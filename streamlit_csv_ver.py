@@ -106,12 +106,13 @@ a {
 # ==================================================
 @st.cache_data(ttl=600)
 def load_all():
-    df = pd.read_csv(CSV_URL)
-    # ★ 列名を正規化（最重要）
-    df.columns = [c.strip().upper() for c in df.columns]
+    df = pd.read_csv(CSV_URL, encoding="utf-8-sig")
+    # ★ BOM + 大文字小文字 + 空白を完全除去
+    df.columns = [c.replace("\ufeff", "").strip().upper() for c in df.columns]
     return df
 
 df = load_all()
+
 
 # ==================================================
 # State
