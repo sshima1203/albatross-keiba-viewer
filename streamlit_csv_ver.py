@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-CSV_URL = "https://gist.githubusercontent.com/sshima1203/697b91ab5a8ccd8de8eb10adb19aea84/raw/3fd8b6230712701f5857db8181a596268da8d17e/prediction_latest.csv"
+CSV_URL = "https://gist.githubusercontent.com/sshima1203/e8464dd207c9aa30c51255806c104470/raw/370ca2ecf9ea08215ffc097fcc91b1734f5bea8c/prediction_latest.csv"
 
 # ==================================================
 # Page config
