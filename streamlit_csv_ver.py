@@ -1,11 +1,18 @@
 import streamlit as st
 import pandas as pd
-import time
+import time   # ← これが抜けていた
 
 CSV_URL = (
-    "https://gist.githubusercontent.com/sshima1203/xxxxx/raw/prediction_latest.csv"
+    "https://gist.githubusercontent.com/sshima1203/e8464dd207c9aa30c51255806c104470/raw/prediction_latest.csv"
     f"?t={int(time.time() // 300)}"
 )
+
+@st.cache_data(ttl=300)
+def load_data():
+    return pd.read_csv(CSV_URL)
+
+df = load_data()
+
 # ==================================================
 # Page config
 # ==================================================
