@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
 import pandas as pd
-import time   # ← これが抜けていた
+import time
 
+# ==================================================
+# CSV URL（5分キャッシュ回避）
+# ==================================================
 CSV_URL = (
     "https://gist.githubusercontent.com/sshima1203/e8464dd207c9aa30c51255806c104470/raw/prediction_latest.csv"
     f"?t={int(time.time() // 300)}"
@@ -24,7 +28,7 @@ st.set_page_config(
 )
 
 # ==================================================
-# CSS
+# CSS（※ CSS だけを書く）
 # ==================================================
 st.markdown("""
 <meta charset="UTF-8">
@@ -109,50 +113,34 @@ a {
     text-decoration: none;
 }
 
-st.markdown("""
-<div class="notice">
-    ※ 本予想は馬体重確定時点の情報をもとに確定します。<br>
-    ※ データ更新は原則として毎時0分に実行されます。<br>
-    ※ 更新内容の反映には最大で約10分程度の時間差が生じる場合があります。<br>
-    ※ 馬券の購入および結果に関する最終判断は、各自の責任にてお願いいたします。
-</div>
-        """, unsafe_allow_html=True)
+/* 注意書き */
+.notice {
+    margin-top: 24px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(148,163,184,0.18);
+    font-size: 0.65rem;
+    line-height: 1.4;
+    color: rgba(226,232,240,0.65);
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ==================================================
-# CSV Load（最終・正解）
+# CSV Load（正規化）
 # ==================================================
 def load_all():
-    df = pd.read_csv(
-        CSV_URL,
-        encoding="utf-8-sig",  # BOM対策のみ残す
-    )
-
-    # 列名正規化（保険）
-    df.columns = [
-        c.replace("\ufeff", "")
-         .strip()
-         .upper()
-        for c in df.columns
-    ]
+    df = pd.read_csv(CSV_URL, encoding="utf-8-sig")
+    df.columns = [c.replace("\ufeff", "").strip().upper() for c in df.columns]
     return df
 
 df = load_all()
 
-
-
-
 # ==================================================
-# 必須列チェック（ここで止める）
+# 必須列チェック
 # ==================================================
 REQUIRED_COLS = {
-    "RACE_ID",
-    "RACE_NAME",
-    "HORSE_NAME",
-    "HORSE_NUM",
-    "FINISH_POSITION",
-    "NETKEIBA_URL",
+    "RACE_ID", "RACE_NAME", "HORSE_NAME",
+    "HORSE_NUM", "FINISH_POSITION", "NETKEIBA_URL"
 }
 
 missing = REQUIRED_COLS - set(df.columns)
@@ -260,7 +248,6 @@ else:
         f"<div class='section-title'>{race_no}R　{race_name}</div>",
         unsafe_allow_html=True
     )
-
     st.markdown(f"[netkeiba]({netkeiba_url})")
 
     for _, r in ddf.iterrows():
@@ -273,3 +260,15 @@ else:
         )
 
 st.markdown('</div>', unsafe_allow_html=True)
+
+# ==================================================
+# Notice（ページ最下部）
+# ==================================================
+st.markdown("""
+<div class="notice">
+※ 本予想は馬体重確定時点の情報をもとに確定します。<br>
+※ データ更新は原則として毎時0分に実行されます。<br>
+※ 更新内容の反映には最大で約10分程度の時間差が生じる場合があります。<br>
+※ 馬券の購入および結果に関する最終判断は、各自の責任にてお願いいたします。
+</div>
+""", unsafe_allow_html=True)
