@@ -102,28 +102,25 @@ a {
 """, unsafe_allow_html=True)
 
 # ==================================================
-# CSV Load（区切り自動判定・最終版）
+# CSV Load（最終・正解）
 # ==================================================
 def load_all():
     df = pd.read_csv(
         CSV_URL,
-        encoding="utf-8-sig",
-        sep=None,           # ← 区切り文字を自動判定
-        engine="python",    # ← 必須
+        encoding="utf-8-sig",  # BOM対策のみ残す
     )
 
-    # 列名を完全正規化
+    # 列名正規化（保険）
     df.columns = [
         c.replace("\ufeff", "")
-         .replace(" ", "")
          .strip()
          .upper()
         for c in df.columns
     ]
-
     return df
 
 df = load_all()
+
 
 
 
