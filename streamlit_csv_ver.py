@@ -102,17 +102,40 @@ a {
 """, unsafe_allow_html=True)
 
 # ==================================================
-# CSV Load
+# CSV Load（キャッシュなし・安全版）
 # ==================================================
-@st.cache_data(ttl=600)
 def load_all():
     df = pd.read_csv(CSV_URL, encoding="utf-8-sig")
-    # ★ BOM + 大文字小文字 + 空白を完全除去
-    df.columns = [c.replace("\ufeff", "").strip().upper() for c in df.columns]
+
+    # 列名を完全正規化（BOM / 空白 / 大小文字）
+    df.columns = [
+        c.replace("\ufeff", "")
+         .replace(" ", "")
+         .strip()
+         .upper()
+        for c in df.columns
+    ]
     return df
 
 df = load_all()
 
+# ==================================================
+# 必須列チェック（ここで止める）
+# ==================================================
+REQUIRED_COLS = {
+    "RACE_ID",
+    "RACE_NAME",
+    "HORSE_NAME",
+    "HORSE_NUM",
+    "FINISH_POSITION",
+    "NETKEIBA_URL",
+}
+
+missing = REQUIRED_COLS - set(df.columns)
+if missing:
+    st.error(f"CSVの列が不足しています: {missing}")
+    st.write("現在の列一覧:", df.columns.tolist())
+    st.stop()
 
 # ==================================================
 # State
