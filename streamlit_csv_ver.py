@@ -1,8 +1,10 @@
 import streamlit as st
 import pandas as pd
 
-CSV_URL = "https://gist.githubusercontent.com/sshima1203/e8464dd207c9aa30c51255806c104470/raw/370ca2ecf9ea08215ffc097fcc91b1734f5bea8c/prediction_latest.csv"
-
+CSV_URL = (
+    "https://gist.githubusercontent.com/sshima1203/xxxxx/raw/prediction_latest.csv"
+    f"?t={int(time.time() // 300)}"
+)
 # ==================================================
 # Page config
 # ==================================================
