@@ -116,6 +116,7 @@ st.markdown("""
     ※ 更新内容の反映には最大で約10分程度の時間差が生じる場合があります。<br>
     ※ 馬券の購入および結果に関する最終判断は、各自の責任にてお願いいたします。
 </div>
+        """, unsafe_allow_html=True)
 </style>
 """, unsafe_allow_html=True)
 
