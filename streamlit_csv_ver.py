@@ -14,7 +14,7 @@ st.set_page_config(
 )
 
 # ==================================================
-# CSS（今までと同じ）
+# CSS
 # ==================================================
 st.markdown("""
 <meta charset="UTF-8">
@@ -106,7 +106,10 @@ a {
 # ==================================================
 @st.cache_data(ttl=600)
 def load_all():
-    return pd.read_csv(CSV_URL)
+    df = pd.read_csv(CSV_URL)
+    # ★ 列名を正規化（最重要）
+    df.columns = [c.strip().upper() for c in df.columns]
+    return df
 
 df = load_all()
 
@@ -126,10 +129,10 @@ COURSE_MAP = {
 }
 
 def rank_mark(r):
-    return {1:"◎",2:"〇",3:"▲",4:"△",5:"☆"}.get(r,"")
+    return {1:"◎", 2:"〇", 3:"▲", 4:"△", 5:"☆"}.get(r, "")
 
 # ==================================================
-# Data shaping（DB版と同じ）
+# Data shaping
 # ==================================================
 df["RACE_ID"] = df["RACE_ID"].astype(str)
 df["COURSE_CODE"] = df["RACE_ID"].str[4:6]
@@ -176,7 +179,7 @@ if st.session_state.course is None:
 elif st.session_state.day is None:
     st.markdown("<div class='section-title'>開催日</div>", unsafe_allow_html=True)
     for _, r in (
-        df[df["COURSE"] == st.session_state.course][["KAISAI","DAY"]]
+        df[df["COURSE"] == st.session_state.course][["KAISAI", "DAY"]]
         .drop_duplicates()
         .iterrows()
     ):
@@ -191,7 +194,7 @@ elif st.session_state.race is None:
         (df["COURSE"] == st.session_state.course) &
         (df["KAISAI"] == st.session_state.kaisai) &
         (df["DAY"] == st.session_state.day)
-    ][["RACE_ID","RACE_NAME","RACE_NO"]].drop_duplicates().sort_values("RACE_NO")
+    ][["RACE_ID", "RACE_NAME", "RACE_NO"]].drop_duplicates().sort_values("RACE_NO")
 
     for _, r in rdf.iterrows():
         if st.button(f"{r.RACE_NO}R  {r.RACE_NAME}"):
@@ -199,7 +202,7 @@ elif st.session_state.race is None:
             st.rerun()
 
 else:
-    ddf = df[df["RACE_ID"] == st.session_state.race].sort_values("finish_position")
+    ddf = df[df["RACE_ID"] == st.session_state.race].sort_values("FINISH_POSITION")
 
     race_no = ddf.iloc[0]["RACE_NO"]
     race_name = ddf.iloc[0]["RACE_NAME"]
@@ -215,8 +218,8 @@ else:
     for _, r in ddf.iterrows():
         st.markdown(
             f"<div class='race-row'>"
-            f"<div class='rank'>{rank_mark(r.finish_position)}</div>"
-            f"<div class='horse'>{r.horse_num} {r.HORSE_NAME}</div>"
+            f"<div class='rank'>{rank_mark(r.FINISH_POSITION)}</div>"
+            f"<div class='horse'>{r.HORSE_NUM} {r.HORSE_NAME}</div>"
             f"</div>",
             unsafe_allow_html=True
         )
