@@ -102,15 +102,14 @@ a {
 """, unsafe_allow_html=True)
 
 # ==================================================
-# CSV Load（最終確定）
+# CSV Load（区切り自動判定・最終版）
 # ==================================================
 def load_all():
     df = pd.read_csv(
         CSV_URL,
         encoding="utf-8-sig",
-        sep=",",
-        header=0,
-        engine="python",
+        sep=None,           # ← 区切り文字を自動判定
+        engine="python",    # ← 必須
     )
 
     # 列名を完全正規化
@@ -121,9 +120,11 @@ def load_all():
          .upper()
         for c in df.columns
     ]
+
     return df
 
 df = load_all()
+
 
 
 # ==================================================
