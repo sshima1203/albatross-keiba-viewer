@@ -102,12 +102,18 @@ a {
 """, unsafe_allow_html=True)
 
 # ==================================================
-# CSV Load（キャッシュなし・安全版）
+# CSV Load（最終確定）
 # ==================================================
 def load_all():
-    df = pd.read_csv(CSV_URL, encoding="utf-8-sig")
+    df = pd.read_csv(
+        CSV_URL,
+        encoding="utf-8-sig",
+        sep=",",
+        header=0,
+        engine="python",
+    )
 
-    # 列名を完全正規化（BOM / 空白 / 大小文字）
+    # 列名を完全正規化
     df.columns = [
         c.replace("\ufeff", "")
          .replace(" ", "")
@@ -118,6 +124,7 @@ def load_all():
     return df
 
 df = load_all()
+
 
 # ==================================================
 # 必須列チェック（ここで止める）
