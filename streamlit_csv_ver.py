@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 
 CSV_URL = (
     "https://gist.githubusercontent.com/sshima1203/xxxxx/raw/prediction_latest.csv"
