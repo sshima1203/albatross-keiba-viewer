@@ -165,7 +165,7 @@ COURSE_MAP = {
 }
 
 def rank_mark(r):
-    return {1: "◎", 2: "〇", 3: "▲", 4: "△", 5: "☆"}.get(r, "")
+    return {1: "◎", 2: "〇", 3: "▲"}.get(r, "")
 
 def smart_int(v):
     """
