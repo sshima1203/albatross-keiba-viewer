@@ -165,7 +165,24 @@ COURSE_MAP = {
 }
 
 def rank_mark(r):
-    return {1:"◎", 2:"〇", 3:"▲", 4:"△", 5:"☆"}.get(r, "")
+    return {1: "◎", 2: "〇", 3: "▲", 4: "△", 5: "☆"}.get(r, "")
+
+def smart_int(v):
+    """
+    intにできるときだけ int にする。
+    ・1.0 → 1
+    ・NaN / None → ''
+    ・1.5 / 文字列 → そのまま
+    """
+    if pd.isna(v):
+        return ""
+    try:
+        iv = int(v)
+        if float(v) == iv:
+            return iv
+    except Exception:
+        pass
+    return v
 
 # ==================================================
 # Data shaping
@@ -254,7 +271,7 @@ else:
         st.markdown(
             f"<div class='race-row'>"
             f"<div class='rank'>{rank_mark(r.FINISH_POSITION)}</div>"
-            f"<div class='horse'>{int(r.HORSE_NUM)} {r.HORSE_NAME}</div>"
+            f"<div class='horse'>{smart_int(r.HORSE_NUM)} {r.HORSE_NAME}</div>"
             f"</div>",
             unsafe_allow_html=True
         )
