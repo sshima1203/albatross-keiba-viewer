@@ -254,7 +254,7 @@ else:
         st.markdown(
             f"<div class='race-row'>"
             f"<div class='rank'>{rank_mark(r.FINISH_POSITION)}</div>"
-            f"<div class='horse'>{r.HORSE_NUM} {r.HORSE_NAME}</div>"
+            f"<div class='horse'>{int(r.HORSE_NUM)} {r.HORSE_NAME}</div>"
             f"</div>",
             unsafe_allow_html=True
         )
